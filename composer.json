@@ -1,10 +1,20 @@
+
 {
     "name": "corb/template-manager",
     "authors": [
         {
             "name": "Gabriel Ortiz",
-            "email": "gabriel.ortiz@corb.mx"
+            "email": "gabriel.ortiz@corb.mx",
+            "homepage": "http://corb.mx",
+            "role": "Developer"
         }
     ],
-    "require": {}
+    "type": "library",
+    "description": "Template manager for laravel",
+    "keywords": ["laravel","template"],
+    "homepage": "https://github.com/gabomarin/l5-template-manager.git",
+
+    "require": {
+        "php": ">=5.5.9"
+    }
 }
