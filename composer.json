@@ -1,0 +1,10 @@
+{
+    "name": "corb/template-manager",
+    "authors": [
+        {
+            "name": "Gabriel Ortiz",
+            "email": "gabriel.ortiz@corb.mx"
+        }
+    ],
+    "require": {}
+}
