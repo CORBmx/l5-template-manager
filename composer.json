@@ -17,6 +17,11 @@
     "require": {
         "php": ">=5.5.9"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "Corb\\TemplateManager": "src/"
+        }
+    }
 
 }
