@@ -8,4 +8,7 @@ Interface TemplateManagerContract
 
     public function getFields();
 
+    public function parse($template, $data);
+
+
 }
