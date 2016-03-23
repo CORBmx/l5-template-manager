@@ -1,23 +1,46 @@
 <?php
 namespace  Corb\TemplateManager;
+use Schema;
+
 /**
- * Created by IntelliJ IDEA.
- * User: usuario
- * Date: 18/03/16
- * Time: 04:01 PM
+ * Class TemplateManager
+ * @package Corb\TemplateManager
  */
 class TemplateManager implements  TemplateManagerContract
 {
 
     protected $models;
 
-    public function __construct($models = array())
+    /**
+     * TemplateManager constructor.
+     */
+    public function __construct()
     {
-        $this->models = $models;
+        $this->models = config('template-manager.models');
     }
 
-    public function holis()
+    /**
+     * @return mixed
+     */
+    public function getModels()
     {
-        return ('cosa');
+        return $this->models;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFields()
+    {
+        $fields  = [];
+        foreach($this->models as $model)
+        {
+            $schema = new $model;
+            $table = $schema->getTable();
+            $columns = Schema::getColumnListing($table);
+            $fields[$table] = $columns;
+        }
+        $this->fields = $fields;
+        return $this->fields;
     }
 }
