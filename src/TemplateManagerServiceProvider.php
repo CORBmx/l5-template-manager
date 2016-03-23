@@ -1,12 +1,11 @@
-<?php namespace Corb\TemplateManager;
+<?php
+
+namespace Corb\TemplateManager;
 
 use Illuminate\Support\ServiceProvider;
 
-
 class TemplateManagerServiceProvider extends ServiceProvider
 {
-    protected $defer = true;
-
     /**
      * Bootstrap the application services.
      *
@@ -14,9 +13,14 @@ class TemplateManagerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         $this->publishes([
-            __DIR__.'/config/template-manager.php' => config_path('template-manager.php'),
-        ]);
+            __DIR__.'/config/template-manager.php' => config_path('template-manager.php')
+        ],'config');
+        $file_prefix = date('Y_m_d_His_');
+        $this->publishes([
+            __DIR__.'/migrations/corb_template_manager_migration.php' => database_path('migrations/'.$file_prefix.'corb_template_manager_migration.php')
+        ], 'migrations');
     }
 
     /**
@@ -26,20 +30,11 @@ class TemplateManagerServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        if(config('template-manager.use_routes') === true)
+        {
+            include __DIR__ . '/routes.php';
+            $this->app->make( 'Corb\TemplateManager\TemplateManagerController' );
+        }
 
-        $this->app->singleton(TemplateManagerContract::class, function ($app) {
-            return new TemplateManager(config('template-manager.models'));
-        });
-
-    }
-
-    /*
-    * Get the services provided by the provider.
-    *
-    * @return array
-    */
-    public function provides()
-    {
-        return [TemplateManagerContract::class];
     }
 }
