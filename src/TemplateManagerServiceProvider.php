@@ -4,11 +4,17 @@ namespace Corb\TemplateManager;
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class TemplateManagerServiceProvider
+ * @package Corb\TemplateManager
+ * @author Gabriel Ortiz <gabriel.ortiz@corb.mx>
+ */
 class TemplateManagerServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
      *
+     * @author Gabriel Ortiz <gabriel.ortiz@corb.mx>
      * @return void
      */
     public function boot()
@@ -26,6 +32,7 @@ class TemplateManagerServiceProvider extends ServiceProvider
     /**
      * Register the application services.
      *
+     * @author Gabriel Ortiz <gabriel.ortiz@corb.mx>
      * @return void
      */
     public function register()

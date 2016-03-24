@@ -2,18 +2,22 @@
 namespace  Corb\TemplateManager;
 use Schema;
 use DB;
+use Blade;
 
 /**
  * Class TemplateManager
  * @package Corb\TemplateManager
+ * @author Gabriel Ortiz <gabriel.ortiz@corb.mx>
  */
 class TemplateManager implements  TemplateManagerContract
 {
+
 
     protected $models;
 
     /**
      * TemplateManager constructor.
+     * @author Gabriel Ortiz <gabriel.ortiz@corb.mx>
      */
     public function __construct()
     {
@@ -21,6 +25,8 @@ class TemplateManager implements  TemplateManagerContract
     }
 
     /**
+     * Get models found in config file
+     * @author Gabriel Ortiz <gabriel.ortiz@corb.mx>
      * @return mixed
      */
     public function getModels()
@@ -29,7 +35,9 @@ class TemplateManager implements  TemplateManagerContract
     }
 
     /**
-     * @return array
+     * @author Gabriel Ortiz <gabriel.ortiz@corb.mx>
+     * @return array of database fields
+     * @access public
      */
     public function getFields()
     {
@@ -45,6 +53,14 @@ class TemplateManager implements  TemplateManagerContract
         return $this->fields;
     }
 
+    /**
+     * Parse a database template
+     * @author Gabriel Ortiz <gabriel.ortiz@corb.mx>
+     * @param $slug Template slug from database
+     * @param $data Array of data to be used in template
+     * @return string|false
+     * @access public
+     */
     public function parse($slug, $data)
     {
         $template = DB::table(config('template-manager.template_table'))
@@ -52,16 +68,22 @@ class TemplateManager implements  TemplateManagerContract
                       ->first();
         if($template)
         {
-
-            dd($this->bladeCompile($template->value, $data));
+            return $this->bladeCompile($template->value, $data);
         }
-        dd($template);
-
+        return false;
     }
 
-    public function bladeCompile($value, array $args = array())
+    /**
+     * Thanks stackoverflow http://stackoverflow.com/a/33872239
+     * @param $value Template value to be compiled
+     * @param array $args Data to be used in template
+     * @return string Compiled template
+     * @throws \Exception
+     * @access private
+     */
+    private function bladeCompile($value, array $args = array())
     {
-        $generated = \Blade::compileString($value);
+        $generated = Blade::compileString($value);
 
         ob_start() and extract($args, EXTR_SKIP);
 
@@ -73,9 +95,9 @@ class TemplateManager implements  TemplateManagerContract
             eval('?>'.$generated);
         }
 
-            // If we caught an exception, we'll silently flush the output
-            // buffer so that no partially rendered views get thrown out
-            // to the client and confuse the user with junk.
+        // If we caught an exception, we'll silently flush the output
+        // buffer so that no partially rendered views get thrown out
+        // to the client and confuse the user with junk.
         catch (\Exception $e)
         {
             ob_get_clean(); throw $e;
