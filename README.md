@@ -1,6 +1,6 @@
 # CORB TEMPLATE MANAGER 
 
-A database templates compiler for laravel 5
+A database template compiler for laravel 5
 
 ## Installation
 
@@ -24,6 +24,7 @@ This will create a config file named template-manager.php
 ## Configuration file
  
 * models
+
    The model property is an array containing Model Namespaces to access table columns.
    
       `'models' => [
@@ -38,24 +39,28 @@ This will create a config file named template-manager.php
                 ];
             `
             
-    Why? If you want to implement a WYSIWYG edit maybe this option is useful.
+   Why? If you want to implement a WYSIWYG edit maybe this option is useful.
 
       
 * use_routes
-    If you want to use package routes to get available table fields set to true (default).
+
+   If you want to use package routes to get available table fields set to true (default).
     
-    `'use_routes'      => true,`
+    `'use_routes' => true,`
     
 * route
-    Url of the route, default 'templates'
+   Url of the route, default 'templates'
      
-    `'route'           => 'templates',`
+    `'route' => 'templates',`
     
-    Ex:
+   Ex:
          `localhost:8000/templates'` //This url return  all the configured tables with its columns
 
 * template_table
+
      Name of the database table to be used, default 'templates'.
+     
+     `'template_table' => 'templates',`
      
      WARNING: This configuration is used to create database migration. If you have an older migration it will be useless, so maybe you want to delete the migrate (Need to improve this).
      
@@ -64,7 +69,8 @@ This will create a config file named template-manager.php
 
 * Create migration 
    
-   `$ php artisan vendor:publish --tag=config`
+   `$ php artisan vendor:publish --tag=migrations`
+
    This command create a new database migration using configuration file. Remember previous warning!.
    
 * Run migrate
@@ -89,7 +95,7 @@ Compile a new template
 
 `$compiled_template  = $template->parse('test_template', $template_data)`
 
-Complete example:
+##Example
 
 
 ##### Database template: test_template
@@ -123,19 +129,21 @@ Complete example:
 
 
 
-### TemplateManager Methods
+## TemplateManager Methods
 
 #####  getModels()
    - Get models found in config file
    - Return array
    
         [
-            App\User::class,
-            App\Product::class,
+            "App\User",
+            "App\Product",
         ]
+
 #####  getFields()
-    - Get table columns from config models
-    - Return array
+   - Get table columns from config models
+   - Return array
+   
         [
             "users": [
                 "id",
@@ -151,11 +159,12 @@ Complete example:
         ]
         
 ##### parse($slug, $data)
-    - Parse a template
-    - Params: 
+   - Parse a template
+   - Params: 
+   
         - $slug: template slug
         - $data: Array of data to be parsed in template
-    -Return: A string of compiled template
+   -Return: A string of compiled template
     
    
    
