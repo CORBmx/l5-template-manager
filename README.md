@@ -56,13 +56,7 @@ This will create a config file named template-manager.php
    Ex:
          `localhost:8000/templates'` //This url return  all the configured tables with its columns
 
-* template_table
 
-     Name of the database table to be used, default 'templates'.
-     
-     `'template_table' => 'templates',`
-     
-     WARNING: This configuration is used to create database migration. If you have an older migration it will be useless, so maybe you want to delete the migrate (Need to improve this).
      
      
 ## Template table
@@ -71,7 +65,7 @@ This will create a config file named template-manager.php
    
    `$ php artisan vendor:publish --tag=migrations`
 
-   This command create a new database migration using configuration file. Remember previous warning!.
+   This command create a new database migration using configuration file.
    
 * Run migrate
 

@@ -12,8 +12,6 @@
         ],
         'use_routes'      => true,
         'route'           => 'templates',
-        'template_table'  => 'templates'  //Dont change this option if migration is completed, otherwise rollback will not work.
-
 
     ];
 

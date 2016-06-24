@@ -12,11 +12,11 @@ class CorbTemplateManagerMigration extends Migration {
      */
     public function up()
     {
-        Schema::create(config('template-manager.template_table'), function(Blueprint $table)
+        Schema::create('tm_templates', function(Blueprint $table)
         {
             $table->increments('id');
             $table->string('name', 100);
-            $table->string('slug', 100);
+            $table->string('slug', 100)->unique();
             $table->longText('value');
         });
     }
@@ -29,7 +29,7 @@ class CorbTemplateManagerMigration extends Migration {
      */
     public function down()
     {
-        Schema::drop(config('template-manager.template_table'));
+        Schema::drop('tm_templates');
     }
 
 }

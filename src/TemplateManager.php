@@ -61,11 +61,10 @@ class TemplateManager implements  TemplateManagerContract
      * @return string|false
      * @access public
      */
-    public function parse($slug, $data)
+    public function parse($slug, $data = [])
     {
-        $template = DB::table(config('template-manager.template_table'))
-                      ->where('slug',$slug)
-                      ->first();
+        $template = TemplateModel::where('slug',$slug)
+                                 ->first();
         if($template)
         {
             return $this->bladeCompile($template->value, $data);
@@ -107,6 +106,9 @@ class TemplateManager implements  TemplateManagerContract
 
         return $content;
     }
+
+
+
 }
 
 
