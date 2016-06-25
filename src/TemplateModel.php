@@ -3,9 +3,17 @@
 namespace  Corb\TemplateManager;
 use Illuminate\Database\Eloquent\Model;
 
-$template_table = config('template-manager.template_table');
+/**
+ * Class TemplateModel
+ * @package Corb\TemplateManager
+ * @author Gabriel Ortiz <gabriel.ortiz@corb.mx>
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 class TemplateModel extends Model
 {
+
+    protected  $table = 'tm_templates';
 
     protected $fillable = [
         'name',
@@ -13,7 +21,5 @@ class TemplateModel extends Model
         'value',
     ];
 
-    protected  $table = 'tm_templates';
-
-
+    public $timestamps = false;
 }

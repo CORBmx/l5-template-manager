@@ -3,6 +3,8 @@ namespace Corb\TemplateManager;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Validator;
+
 
 /**
  * Class TemplateManagerController
@@ -44,19 +46,30 @@ class TemplateManagerController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'slug' => 'required|unique|max:255',
+        $validator = Validator::make($request->all(), [
+            'slug' => 'required|unique:tm_templates|max:255',
             'name' => 'required',
             'value' => 'required|string|min:1',
         ]);
+        if ($validator->fails()) {
+            $status = 400;
+            $data = [
+                'data'    => [],
+                'status'  => 'ERROR',
+                'message' => $messages = $validator->errors()
+            ];
+        }
+        else {
+            $status = 200;
+            $template = TemplateModel::create($request->all());
+            $data = [
+                'data'    => $template,
+                'status'  => 'OK',
+                'message' => 'Template created',
+            ];
+        }
 
-        $template = TemplateModel::create($request);
-        $data = [
-            'status'  => 'OK',
-            'message' => 'Template created',
-            'data'    => $template
-        ];
-        return response($data);
+        return response()->json($data,$status);
     }
 
     /**
@@ -67,20 +80,74 @@ class TemplateManagerController extends Controller
      * @param TemplateModel $template
      * @return Response
      */
-    public function update(Request $request, TemplateModel $template)
+    public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'slug' => 'required|unique|max:255',
-            'name' => 'required',
-            'value' => 'required|string|min:1',
-        ]);
 
-        $template->save($request);
-        $data = [
-            'status'  => 'OK',
-            'message' => 'Template updated',
-            'data'    => $template
-        ];
-        return response($data);
+        $template = TemplateModel::find($id);
+        if ($template) {
+            $validator = Validator::make($request->all(), [
+                'slug' => 'required|unique:tm_templates,slug,'.$id.'|max:255',
+                'name' => 'required',
+                'value' => 'required|string|min:1',
+            ]);
+            if ($validator->fails()) {
+                $status = 400;
+                $data = [
+                    'data'    => [],
+                    'status'  => 'ERROR',
+                    'message' => $messages = $validator->errors()
+                ];
+            }
+            else {
+                $status = 200;
+                $template->update($request->all());
+
+                $data = [
+                    'data'    => $template,
+                    'status'  => 'OK',
+                    'message' => 'Template update',
+                ];
+            }
+        }
+        else {
+            $status = 404;
+            $data = [
+                'data'    => [],
+                'status'  => 'NOT_FOUND',
+                'message' => 'Template not found',
+            ];
+        }
+        return response()->json($data,$status);
+    }
+
+    /**
+     * @author Gabriel Ortiz <gabriel.ortiz@corb.mx>
+     * @version 0.1.0
+     * @since 0.1.0
+     * @param $id
+     */
+    public function destroy($id)
+    {
+        $template = TemplateModel::find($id);
+        if ($template){
+            $template->delete();
+            $data = [
+                'data'    => [],
+                'status'  => 'OK',
+                'message' => 'Template deleted',
+            ];
+            $status = 200;
+
+        }
+        else {
+            $data = [
+                'data'    => [],
+                'status'  => 'NOT_FOUND',
+                'message' => 'Template not found',
+            ];
+            $status = 404;
+        }
+        return response()->json($data,$status);
+
     }
 }
