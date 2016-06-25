@@ -37,6 +37,34 @@ class TemplateManagerController extends Controller
         return TemplateModel::all();
     }
 
+    public function show(Request $request, $id)
+    {
+        $template = TemplateModel::find($id);
+        if ($template) {
+            $output = $request->input('output');
+            if ($output) {
+
+            }
+            else {
+                $data = [
+                    'data'    => $template,
+                    'status'  => 'OK',
+                    'message' => '',
+                ];
+                return response()->json($data, 200);
+            }
+        }
+        else {
+
+            $data = [
+                'data'    => [],
+                'status'  => 'NOT_FOUND',
+                'message' => 'Template not found',
+            ];
+            return response()->json($data, 404);
+        }
+    }
+
     /**
      * @author Gabriel Ortiz <gabriel.ortiz@corb.mx>
      * @version 0.1.0
@@ -125,6 +153,7 @@ class TemplateManagerController extends Controller
      * @version 0.1.0
      * @since 0.1.0
      * @param $id
+     * @return mixed
      */
     public function destroy($id)
     {
