@@ -1,6 +1,10 @@
 <?php
 namespace Corb\TemplateManager;
 
+require  '../vendor/autoload.php';
+
+
+use Anam\PhantomMagick\Converter;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
@@ -43,7 +47,10 @@ class TemplateManagerController extends Controller
         if ($template) {
             $output = $request->input('output');
             if ($output) {
-
+                $conv = new Converter();
+                $conv->source('http://google.com')
+                     ->toPdf()
+                     ->save('cosa.pfg');
             }
             else {
                 $data = [

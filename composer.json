@@ -1,4 +1,3 @@
-
 {
     "name": "corb/template-manager",
     "authors": [
@@ -15,7 +14,9 @@
     "homepage": "https://github.com/gabomarin/l5-template-manager.git",
 
     "require": {
-        "php": ">=5.5.9"
+        "php": ">=5.5.9",
+        "anam/phantommagick": "^1.0",
+        "anam/phantomjs-linux-x86-binary": "^2.1"
     },
     "minimum-stability": "dev",
     "autoload": {

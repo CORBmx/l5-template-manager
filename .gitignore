@@ -1,1 +1,9 @@
 .idea
+composer.lock
+Would skip repository vendor/symfony/event-dispatcher
+Would skip repository vendor/guzzle/guzzle
+Would skip repository vendor/aws/aws-sdk-php
+Would skip repository vendor/league/flysystem
+Would skip repository vendor/league/flysystem-aws-s3-v2
+vendor/
+
