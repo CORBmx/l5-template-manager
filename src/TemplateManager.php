@@ -65,8 +65,7 @@ class TemplateManager implements  TemplateManagerContract
     {
         $template = TemplateModel::where('slug',$slug)
                                  ->first();
-        if($template)
-        {
+        if ($template) {
             return $this->bladeCompile($template->value, $data);
         }
         return false;
@@ -78,9 +77,9 @@ class TemplateManager implements  TemplateManagerContract
      * @param array $args Data to be used in template
      * @return string Compiled template
      * @throws \Exception
-     * @access private
+     * @access public
      */
-    private function bladeCompile($value, array $args = array())
+    public function bladeCompile($value, array $args = array())
     {
         $generated = Blade::compileString($value);
 
@@ -110,5 +109,3 @@ class TemplateManager implements  TemplateManagerContract
 
 
 }
-
-

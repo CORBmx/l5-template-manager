@@ -1,13 +1,12 @@
 <?php
 namespace Corb\TemplateManager;
 
-require  '../vendor/autoload.php';
-
-
-use Anam\PhantomMagick\Converter;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
+
+use Barryvdh\DomPDF\Facade as PDF;
+
 
 
 /**
@@ -41,25 +40,57 @@ class TemplateManagerController extends Controller
         return TemplateModel::all();
     }
 
-    public function show(Request $request, $id)
+
+    public function parse(Request $request, TemplateManager $template_manager ,$id)
     {
         $template = TemplateModel::find($id);
         if ($template) {
             $output = $request->input('output');
-            if ($output) {
-                $conv = new Converter();
-                $conv->source('http://google.com')
-                     ->toPdf()
-                     ->save('cosa.pfg');
+            if (!$output) {
+                $output ='html';
             }
-            else {
-                $data = [
-                    'data'    => $template,
-                    'status'  => 'OK',
-                    'message' => '',
-                ];
-                return response()->json($data, 200);
+            $data = $request->input('data');
+            if( !$data ){
+                $data = [];
             }
+            $html = $template_manager->bladeCompile($template->value, $data);
+
+            switch ($output)
+            {
+                case 'pdf':
+                    return PDF::loadHTML($html)->setWarnings(false)->download($template->slug.'.pdf');
+                break;
+
+
+                case 'html':  default:
+                    return $html;
+                    break;
+
+            }
+
+        }
+        else {
+
+            $data = [
+                'data'    => [],
+                'status'  => 'NOT_FOUND',
+                'message' => 'Template not found',
+            ];
+            return response()->json($data, 404);
+        }
+
+    }
+
+    public function show(Request $request, $id, TemplateManager $template_manager)
+    {
+        $template = TemplateModel::find($id);
+        if ($template) {
+            $data = [
+                'data'    => $template,
+                'status'  => 'OK',
+                'message' => '',
+            ];
+            return response()->json($data, 200);
         }
         else {
 
