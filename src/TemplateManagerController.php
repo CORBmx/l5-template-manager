@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Validator;
 
 use Barryvdh\DomPDF\Facade as PDF;
+use PhpOffice\PhpWord\PhpWord;
+
 
 
 
@@ -50,7 +52,7 @@ class TemplateManagerController extends Controller
                 $output ='html';
             }
             $data = $request->input('data');
-            if( !$data ){
+            if ( !$data ) {
                 $data = [];
             }
             $html = $template_manager->bladeCompile($template->value, $data);
@@ -64,7 +66,20 @@ class TemplateManagerController extends Controller
 
                 case 'html':  default:
                     return $html;
-                    break;
+                break;
+
+
+                case 'doc':
+                    $phpWord = new PhpWord();
+                    $toOpenXML = HTMLtoOpenXML::getInstance()->fromHTML("<p>te<b>s</b>t</p>");
+                    $phpWord->setValue('test', $toOpenXML);
+                    $filename = $template->slug.'.docx';
+                    $phpWord->save($filename);
+                    flush();
+                    readfile($filename);
+                    unlink($filename);
+                    dd($phpWord);
+                break;
 
             }
 
